@@ -18,6 +18,7 @@ import {
 import { PlusIcon } from 'lucide-react'
 import Issue from '../_components/Issue'
 import { issues_query } from '@/gql/issues-query'
+import { create_issue_mutation } from '@/gql/create-issue-mutation'
 
 const IssuesPage = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -26,8 +27,23 @@ const IssuesPage = () => {
   const [{ data, error, fetching }, rerun_issues_query] = useQuery({
     query: issues_query,
   })
+  const [, create_issue] = useMutation(create_issue_mutation)
 
-  const onCreate = async (close) => {}
+  const onCreate = async (close) => {
+    const result = await create_issue({
+      input: {
+        name: issueName,
+        content: issueDescription,
+      },
+    })
+
+    if (result.data) {
+      // await rerun_issues_query()
+      close()
+      setIssueName('')
+      setIssueDescription('')
+    }
+  }
 
   return (
     <div>

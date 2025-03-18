@@ -22,7 +22,7 @@ const GQLProvider = ({ children }: { children: ReactNode }) => {
     const client = createClient({
       url,
       // plugin options
-      exchanges: [ssr, fetchExchange],
+      exchanges: [cacheExchange, ssr, fetchExchange],
       fetchOptions: () => {
         const token = getToken()
 
